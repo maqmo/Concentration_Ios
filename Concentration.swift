@@ -11,21 +11,26 @@ import Foundation
 class Concentration {
     var cards = [Card]()
     var indexOfOneAndOnlyFaceUpCard: Int?
+    var score = 0
     func chooseCard(at index: Int){
         if !cards[index].isMatched{
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index{
+                score -= 1
                 if cards[matchIndex].identifier == cards[index].identifier {
                     cards[matchIndex].isMatched = true;
                     cards[index].isMatched = true;
+                    score += 1
                 }
                 cards[index].isFaceUp = true;
                 indexOfOneAndOnlyFaceUpCard = nil;
+                score += 1
             }else{
                 for flipDownIndex in cards.indices {
                     cards[flipDownIndex].isFaceUp = false
                 }
                 cards[index].isFaceUp = true
                 indexOfOneAndOnlyFaceUpCard = index
+                //score -= 1
             }
         }
     }
@@ -37,10 +42,9 @@ class Concentration {
         shuffleCards()
     }
     func shuffleCards(){
-        var randoms = Set(0...cards.count - 1)i
+        var randoms = Set(0...cards.count - 1)
         for i in cards.indices {
-            let rand = randoms.popFirst()!
-            cards.swapAt(rand, i)
+            cards.swapAt(randoms.popFirst()!, i)
         }
     }
 }
